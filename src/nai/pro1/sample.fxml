@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -14,9 +16,9 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0000999999975" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nai.pro1.Controller">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="428.0" prefWidth="602.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nai.pro1.Controller">
     <children>
-        <GridPane layoutX="0.0" layoutY="0.0" prefHeight="400.0" prefWidth="600.0001220703125">
+        <GridPane layoutX="0.0" layoutY="0.0" prefHeight="428.0" prefWidth="602.0">
             <children>
                 <GridPane GridPane.columnIndex="0" GridPane.rowIndex="0">
                     <children>
@@ -28,15 +30,15 @@
                         <Label text="Próg błędu" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.margin="$x1" GridPane.rowIndex="1" />
                         <Label text="Współczynnik uczenia" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.margin="$x1" GridPane.rowIndex="2" />
                         <Label text="Metoda kodowania" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.margin="$x1" GridPane.rowIndex="3" />
-                        <TextField prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <TextField fx:id="epochAmount" prefWidth="200.0" text="50" GridPane.columnIndex="1" GridPane.rowIndex="0">
                             <GridPane.margin>
                                 <Insets left="10.0" right="10.0" fx:id="x2" />
                             </GridPane.margin>
                         </TextField>
-                        <TextField prefWidth="200.0" GridPane.columnIndex="1" GridPane.margin="$x2" GridPane.rowIndex="1" />
-                        <TextField prefWidth="200.0" GridPane.columnIndex="1" GridPane.margin="$x2" GridPane.rowIndex="2" />
+                        <TextField fx:id="errorThreshold" prefWidth="200.0" text="0.1" GridPane.columnIndex="1" GridPane.margin="$x2" GridPane.rowIndex="1" />
+                        <TextField fx:id="alphaRate" prefWidth="200.0" text="0.7" GridPane.columnIndex="1" GridPane.margin="$x2" GridPane.rowIndex="2" />
                         <Label alignment="CENTER_LEFT" text="Status modelu" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
-                        <Label text="nienauczony" textFill="#ff3333" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                        <Label fx:id="modelStatus" text="nienauczony" textFill="#ff3333" GridPane.columnIndex="1" GridPane.rowIndex="4">
                             <font>
                                 <Font name="System Bold" size="12.0" />
                             </font>
@@ -44,6 +46,17 @@
                                 <Insets left="10.0" />
                             </GridPane.margin>
                         </Label>
+                  <ComboBox prefWidth="150.0" value="1 na 1" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="1 na 1" />
+                                <String fx:value="binarna" />
+                            </FXCollections>
+                        </items>
+                     <GridPane.margin>
+                        <Insets left="10.0" right="10.0" />
+                     </GridPane.margin>
+                  </ComboBox>
                     </children>
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -57,14 +70,14 @@
                         <RowConstraints maxHeight="45.0" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                 </GridPane>
-                <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="Klasyfikuj" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                <Button mnemonicParsing="false" onAction="#classifyClicked" prefHeight="40.0" prefWidth="200.0" text="Klasyfikuj" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                     <font>
                         <Font name="System Bold" size="15.0" fx:id="x3" />
                     </font>
                 </Button>
-                <LineChart id="LineChart" prefHeight="158.0" prefWidth="400.0" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.rowIndex="2">
+                <LineChart id="LineChart" fx:id="chart" prefHeight="158.0" prefWidth="400.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2">
                     <xAxis>
-                        <CategoryAxis side="BOTTOM" />
+                        <NumberAxis side="BOTTOM" />
                     </xAxis>
                     <yAxis>
                         <NumberAxis side="LEFT" />
@@ -118,7 +131,10 @@
                      </children>
                         </GridPane>
                         <Label text="Narysuj cyfrę" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
-                        <Label text="Label" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
+                        <Label fx:id="predict" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
+                     <font>
+                        <Font size="80.0" />
+                     </font></Label>
                         <Label text="Wynik modelu" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
                     </children>
                     <columnConstraints>
@@ -130,16 +146,18 @@
                         <RowConstraints maxHeight="94.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                 </GridPane>
-                <Button font="$x3" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="Ucz" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                <Button font="$x3" mnemonicParsing="false" onAction="#learnNetworkClicked" prefHeight="40.0" prefWidth="200.0" text="Ucz" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+            <Label text="Wykres zależności błędu do epoki" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="TOP" />
             </children>
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="329.0" minWidth="10.0" prefWidth="300.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="309.0" minWidth="10.0" prefWidth="302.0" />
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints maxHeight="216.0" minHeight="10.0" prefHeight="191.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="132.0" minHeight="10.0" prefHeight="51.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="180.0" minHeight="10.0" prefHeight="158.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="207.0" minHeight="10.0" prefHeight="181.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="180.0" minHeight="10.0" prefHeight="31.0" vgrow="SOMETIMES" />
             </rowConstraints>
         </GridPane>
     </children>
