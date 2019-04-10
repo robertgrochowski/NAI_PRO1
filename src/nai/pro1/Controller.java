@@ -13,7 +13,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
 import java.util.List;
@@ -37,7 +36,6 @@ public class Controller {
     ComboBox<String> codingMethod;
     @FXML
     LineChart<Integer, Double> chart;
-
 
     public Controller(){
         selectedFields = new boolean[6][4];
@@ -69,23 +67,8 @@ public class Controller {
             double maxError = Double.parseDouble(errorThreshold.getText());
             int epoch = Integer.parseInt(epochAmount.getText());
 
-            double[][] trainingSet = {
-                    {0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0},
-                    {0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0},
-                    {1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1}
-            };
-
-            double[][] answerSet = {
-                    {1, 0, 0},
-                    {0, 1, 0},
-                    {0, 0, 1}
-            };
-
-            Matrix trainingSetMatrix = new Matrix(trainingSet);
-            Matrix outputMatrix = new Matrix(answerSet);
-
             network = new NeuralNetwork(3, alpha);
-            List<Double> errors = network.teach(trainingSetMatrix, outputMatrix, epoch, maxError);
+            List<Double> errors = network.teach(epoch, maxError);
             modelStatus.setText("nauczony");
             modelStatus.setTextFill(Color.FORESTGREEN);
 
@@ -105,7 +88,7 @@ public class Controller {
         }
     }
 
-
+    //Code below is responsible for number drawing
     @FXML
     private void mouseEntered(MouseEvent e) {
         Node source = (Node)e.getSource() ;
@@ -141,13 +124,11 @@ public class Controller {
 
         if(source instanceof Rectangle)
         {
-            if(selectedFields[rowIndex][colIndex]) {
+            if(selectedFields[rowIndex][colIndex])
                 ((Rectangle) source).setFill(Color.FORESTGREEN);
-            }
             else
                 ((Rectangle) source).setFill(Color.TRANSPARENT);
         }
-
     }
 
     private void alert(String msg) {

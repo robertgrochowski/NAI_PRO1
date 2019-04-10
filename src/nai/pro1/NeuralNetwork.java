@@ -5,41 +5,54 @@ import Jama.Matrix;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NeuralNetwork {
+class NeuralNetwork {
 
-    private int neuronAmount;
     private Matrix weights;
-
     private double alpha;
     private Matrix bias;
 
-    public NeuralNetwork(int neuronAmount, double alpha)
+    private static final Matrix trainingSet = new Matrix(new double[][]{
+            {0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0},
+            {0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0},
+            {1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1}
+    });
+
+    private static final Matrix answerSet = new Matrix(new double[][]{
+            {1, 0, 0},
+            {0, 1, 0},
+            {0, 0, 1}
+    });
+
+    NeuralNetwork(int neuronAmount, double alpha)
     {
-        this.neuronAmount = neuronAmount;
-        this.weights = Matrix.random(this.neuronAmount, 24); //TODO
+        this.weights = Matrix.random(neuronAmount, 24);
         this.alpha = alpha;
 
-        bias = new Matrix(neuronAmount, 1, 1d); //TODO
+        bias = Matrix.random(neuronAmount, 1);
     }
 
-    //Returns error values
-    public List<Double> teach(Matrix trainingSet, Matrix answerSet, int epochAmount, double maxError) {
+    //Returns epoch error list values to View controller
+    List<Double> teach(int epochAmount, double maxError) {
 
         List<Double> errorList = new ArrayList<>();
 
-        for(int i = 0; i < epochAmount; i++) {
-
+        for(int i = 0; i < epochAmount; i++) { //TODO: while(error < maxError)?
+            //Choose X
             for(int s = 0; s < trainingSet.getRowDimension(); s++)
             {
-
+                //thisInput - Xn
                 Matrix thisInput = trainingSet.getMatrix(s, s, 0, trainingSet.getColumnDimension() - 1).transpose();
+                //thisAnswer - Dn
                 Matrix thisAnswer = answerSet.getMatrix(s, s, 0, answerSet.getColumnDimension() - 1).transpose();
+                //NETValue - All neurons
                 Matrix NETValue = weights.times(thisInput).plus(bias);
 
+                //Output for all neurons
                 Matrix output = getFunctionValue(NETValue);
 
                 errorList.add(getError(output, thisAnswer));
                 System.out.println("error="+errorList.get(errorList.size()-1));
+
                 //improve
                 weights = thisAnswer.minus(output).
                         times(thisInput.transpose()).
@@ -47,14 +60,13 @@ public class NeuralNetwork {
                         plus(weights);
 
                 bias = thisAnswer.minus(output).times(alpha).plus(bias);
-
-                //thisAnswer.minus(output).print(0, 3);
             }
         }
         return errorList;
     }
 
-    public int classify(Matrix input)
+    //Classify class depending on output
+    int classify(Matrix input)
     {
         Matrix NETValue = weights.times(input.transpose()).plus(bias);
         Matrix output = getFunctionValue(NETValue);
@@ -73,21 +85,19 @@ public class NeuralNetwork {
         return -1;
     }
 
-
-    double getError(Matrix outputs, Matrix answerSet) {
+    //Compute neural network error
+    private double getError(Matrix outputs, Matrix answerSet) {
         double error = 0;
         Matrix diff = answerSet.minus(outputs);
 
-        for (int row = 0; row < diff.getRowDimension(); row++) {
+        for (int row = 0; row < diff.getRowDimension(); row++)
             for(int col = 0; col < diff.getColumnDimension(); col++)
-            {
-                error += Math.abs(diff.get(row, col)); //instead of square
-            }
-        }
+                error += Math.pow(diff.get(row, col), 2);
+
         return error * 0.5;
     }
-
-   Matrix getFunctionValue(Matrix NETValue) {
+    //Compute discrete unipolar Y (output) value
+    private Matrix getFunctionValue(Matrix NETValue) {
         Matrix output = new Matrix(NETValue.getRowDimension(), 1);
         for(int i = 0; i < NETValue.getRowDimension(); i++)
         {
@@ -97,5 +107,4 @@ public class NeuralNetwork {
         }
         return output;
    }
-
 }
