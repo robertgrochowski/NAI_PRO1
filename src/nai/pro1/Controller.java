@@ -34,10 +34,7 @@ public class Controller {
     @FXML
     Label predict;
     @FXML
-    ComboBox<String> codingMethod;
-    @FXML
     LineChart<Integer, Double> chart;
-
     public Controller(){
         selectedFields = new boolean[6][4];
     }
@@ -46,7 +43,7 @@ public class Controller {
     private void classifyClicked(ActionEvent event){
 
         if(!learned) {
-            alert("Model nie został jeszcze nauczony");
+            alert("Model hasn't been learned yet!");
             return;
         }
 
@@ -75,7 +72,7 @@ public class Controller {
 
             network = new NeuralNetwork(3, alpha);
             List<Double> errors = network.teach(epoch, maxError);
-            modelStatus.setText("nauczony");
+            modelStatus.setText("taught");
             modelStatus.setTextFill(Color.FORESTGREEN);
 
             XYChart.Series<Integer, Double> series = new XYChart.Series<>();
@@ -87,7 +84,7 @@ public class Controller {
             learned = true;
         }
         catch(NumberFormatException e){
-            alert("Zły format danych");
+            alert("Bad number format");
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -140,7 +137,7 @@ public class Controller {
 
     private void alert(String msg) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Błąd");
+        alert.setTitle("Error");
         alert.setContentText(msg);
         alert.show();
     }

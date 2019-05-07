@@ -22,23 +22,23 @@
             <children>
                 <GridPane GridPane.columnIndex="0" GridPane.rowIndex="0">
                     <children>
-                        <Label text="Liczba epok" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="0">
+                        <Label text="Max epoch amount" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="0">
                             <GridPane.margin>
                                 <Insets left="10.0" fx:id="x1" />
                             </GridPane.margin>
                         </Label>
-                        <Label text="Próg błędu" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.margin="$x1" GridPane.rowIndex="1" />
-                        <Label text="Współczynnik uczenia" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.margin="$x1" GridPane.rowIndex="2" />
-                        <Label text="Metoda kodowania" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.margin="$x1" GridPane.rowIndex="3" />
-                        <TextField fx:id="epochAmount" prefWidth="200.0" text="50" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <Label text="Error threshold" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.margin="$x1" GridPane.rowIndex="1" />
+                        <Label text="Learn rate" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.margin="$x1" GridPane.rowIndex="2" />
+                        <Label text="Coding method" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.margin="$x1" GridPane.rowIndex="3" />
+                        <TextField fx:id="epochAmount" prefWidth="200.0" text="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
                             <GridPane.margin>
                                 <Insets left="10.0" right="10.0" fx:id="x2" />
                             </GridPane.margin>
                         </TextField>
                         <TextField fx:id="errorThreshold" prefWidth="200.0" text="0.1" GridPane.columnIndex="1" GridPane.margin="$x2" GridPane.rowIndex="1" />
-                        <TextField fx:id="alphaRate" prefWidth="200.0" text="0.7" GridPane.columnIndex="1" GridPane.margin="$x2" GridPane.rowIndex="2" />
-                        <Label alignment="CENTER_LEFT" text="Status modelu" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
-                        <Label fx:id="modelStatus" text="nienauczony" textFill="#ff3333" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                        <TextField fx:id="alphaRate" prefWidth="200.0" text="0.1" GridPane.columnIndex="1" GridPane.margin="$x2" GridPane.rowIndex="2" />
+                        <Label alignment="CENTER_LEFT" text="Model status" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+                        <Label fx:id="modelStatus" text="untaught" textFill="#ff3333" GridPane.columnIndex="1" GridPane.rowIndex="4">
                             <font>
                                 <Font name="System Bold" size="12.0" />
                             </font>
@@ -69,7 +69,7 @@
                         <RowConstraints maxHeight="45.0" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                 </GridPane>
-                <Button mnemonicParsing="false" onAction="#classifyClicked" prefHeight="40.0" prefWidth="200.0" text="Klasyfikuj" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                <Button mnemonicParsing="false" onAction="#classifyClicked" prefHeight="40.0" prefWidth="200.0" text="Classify" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                     <font>
                         <Font name="System Bold" size="15.0" fx:id="x3" />
                     </font>
@@ -129,12 +129,12 @@
                         <Rectangle fill="TRANSPARENT" height="20.0" onMouseClicked="#mouseClicked" onMouseEntered="#mouseEntered" onMouseExited="#mouseExit" width="20.0" GridPane.columnIndex="3" GridPane.rowIndex="5" />
                      </children>
                         </GridPane>
-                        <Label text="Narysuj cyfrę" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+                        <Label text="Draw a digit" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
                         <Label fx:id="predict" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
                      <font>
                         <Font size="80.0" />
                      </font></Label>
-                        <Label text="Wynik modelu" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+                        <Label text="Model result" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
                     </children>
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -145,8 +145,8 @@
                         <RowConstraints maxHeight="94.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                 </GridPane>
-                <Button font="$x3" mnemonicParsing="false" onAction="#learnNetworkClicked" prefHeight="40.0" prefWidth="200.0" text="Ucz" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-            <Label text="Wykres zależności błędu do epoki" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="TOP" />
+                <Button font="$x3" mnemonicParsing="false" onAction="#learnNetworkClicked" prefHeight="40.0" prefWidth="200.0" text="Teach" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+            <Label text="error to epoch dependence" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="TOP" />
             </children>
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="329.0" minWidth="10.0" prefWidth="300.0" />
