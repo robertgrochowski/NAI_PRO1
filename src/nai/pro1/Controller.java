@@ -21,6 +21,7 @@ public class Controller {
 
     private boolean[][] selectedFields;
     private NeuralNetwork network;
+    private boolean learned = false;
 
     @FXML
     TextField epochAmount;
@@ -44,6 +45,11 @@ public class Controller {
     @FXML
     private void classifyClicked(ActionEvent event){
 
+        if(!learned) {
+            alert("Model nie został jeszcze nauczony");
+            return;
+        }
+
         Matrix input = new Matrix(1, 24);
         int p = 0;
         for(int i = 0; i < 6; i++)
@@ -52,7 +58,7 @@ public class Controller {
                 input.set(0, p++, (selectedFields[i][x] ? 1d : 0d ));
         }
 
-        input.print(0, 1);
+        input.print(0, 0);
         int classified = network.classify(input);
         if(classified != -1)
             predict.setText(classified+"");
@@ -78,6 +84,7 @@ public class Controller {
             }
             chart.getData().clear();
             chart.getData().add(series);
+            learned = true;
         }
         catch(NumberFormatException e){
             alert("Zły format danych");

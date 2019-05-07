@@ -12,13 +12,25 @@ class NeuralNetwork {
     private Matrix bias;
 
     private static final Matrix trainingSet = new Matrix(new double[][]{
-            {0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0},
-            {0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0},
-            {1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1}
+            {1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1}, //2
+            {0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0}, //0
+            {1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1}, //2
+            {0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0}, //1
+            {0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0}, //1
+            {1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1}, //0
+            {0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0}, //1
+            {0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0}, //1
+            {0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0}  //2
     });
 
     private static final Matrix answerSet = new Matrix(new double[][]{
+            {0, 0, 1},
             {1, 0, 0},
+            {0, 0, 1},
+            {0, 1, 0},
+            {0, 1, 0},
+            {1, 0, 0},
+            {0, 1, 0},
             {0, 1, 0},
             {0, 0, 1}
     });
@@ -35,8 +47,11 @@ class NeuralNetwork {
     List<Double> teach(int epochAmount, double maxError) {
 
         List<Double> errorList = new ArrayList<>();
+        double error = 100;
+        int epochNumber = 0;
 
-        for(int i = 0; i < epochAmount; i++) { //TODO: while(error < maxError)?
+        while(error >= maxError && epochNumber++ <= epochAmount) {
+
             //Choose X
             for(int s = 0; s < trainingSet.getRowDimension(); s++)
             {
@@ -50,8 +65,8 @@ class NeuralNetwork {
                 //Output for all neurons
                 Matrix output = getFunctionValue(NETValue);
 
-                errorList.add(getError(output, thisAnswer));
-                System.out.println("error="+errorList.get(errorList.size()-1));
+                //compute error
+                error = getError(output, thisAnswer);
 
                 //improve
                 weights = thisAnswer.minus(output).
@@ -61,6 +76,8 @@ class NeuralNetwork {
 
                 bias = thisAnswer.minus(output).times(alpha).plus(bias);
             }
+
+            errorList.add(error);
         }
         return errorList;
     }
